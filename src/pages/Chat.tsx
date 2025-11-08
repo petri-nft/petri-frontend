@@ -172,14 +172,15 @@ const Chat = () => {
       
       <main className="container mx-auto px-4 py-6 max-w-3xl">
         {/* Sage Header */}
-        <Card className="p-4 mb-6 bg-gradient-to-br from-accent/10 to-secondary/10 border-accent/30">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
-              <Sparkles className="w-6 h-6 text-primary-foreground" />
+        <Card className="p-4 mb-6 bg-gradient-to-br from-accent/20 via-secondary/10 to-primary/20 border-2 border-accent/50 animate-scale-in shadow-glow relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent animate-shimmer" style={{ backgroundSize: '200% 100%' }} />
+          <div className="flex items-center gap-3 relative z-10">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-0 animate-glow-pulse shadow-glow">
+              <Sparkles className="w-6 h-6 text-primary-foreground animate-pulse" />
             </div>
             <div>
-              <h2 className="font-semibold text-foreground">Sage</h2>
-              <p className="text-sm text-muted-foreground">Your AI Tree Companion</p>
+              <h2 className="font-semibold text-foreground">Sage 🌿</h2>
+              <p className="text-sm text-accent">Your AI Tree Companion</p>
             </div>
             {selectedTree && (
               <Badge variant="secondary" className="ml-auto">
@@ -191,16 +192,17 @@ const Chat = () => {
         
         {/* Messages */}
         <div className="space-y-4 mb-6">
-          {messages.map((msg) => (
+          {messages.map((msg, idx) => (
             <div
               key={msg.id}
-              className={`flex ${msg.from === 'user' ? 'justify-end' : 'justify-start'}`}
+              className={`flex ${msg.from === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in-up`}
+              style={{ animationDelay: `${idx * 0.05}s` }}
             >
               <Card
-                className={`max-w-[80%] p-4 ${
+                className={`max-w-[80%] p-4 transition-all duration-300 hover:scale-105 ${
                   msg.from === 'user'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-card'
+                    ? 'bg-gradient-to-br from-primary to-accent text-primary-foreground border-2 border-primary/50 shadow-glow'
+                    : 'bg-gradient-to-br from-card to-card/80 border-2 border-accent/30 backdrop-blur-sm'
                 }`}
               >
                 <p className="text-sm">{msg.text}</p>

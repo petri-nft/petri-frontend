@@ -23,10 +23,13 @@ export const LessonCard = ({ lesson, onComplete }: LessonCardProps) => {
   };
   
   return (
-    <Card className="p-6 bg-gradient-to-br from-accent/20 to-secondary/20 border-2 border-accent/50">
-      <div className="flex items-start gap-4">
-        <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-          <BookOpen className="w-6 h-6 text-primary" />
+    <Card className="p-6 bg-gradient-to-br from-accent/30 via-secondary/20 to-primary/20 border-2 border-accent/60 relative overflow-hidden animate-scale-in hover:shadow-strong transition-all duration-500">
+      {/* Animated background shimmer */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent animate-shimmer" style={{ backgroundSize: '200% 100%' }} />
+      
+      <div className="flex items-start gap-4 relative z-10">
+        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center flex-shrink-0 animate-float shadow-glow">
+          <BookOpen className="w-6 h-6 text-primary-foreground" />
         </div>
         
         <div className="flex-1 space-y-4">
@@ -103,14 +106,14 @@ export const LessonCard = ({ lesson, onComplete }: LessonCardProps) => {
           )}
           
           {completed && (
-            <div className="flex items-center gap-3 p-4 bg-primary/10 rounded-xl border-2 border-primary/30">
-              <Award className="w-6 h-6 text-primary" />
+            <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-primary/20 to-accent/20 rounded-xl border-2 border-primary/50 animate-level-up shadow-glow">
+              <Award className="w-8 h-8 text-primary animate-bounce-in" />
               <div>
-                <p className="font-semibold text-foreground">Lesson Complete!</p>
-                <p className="text-sm text-muted-foreground">
+                <p className="font-bold text-lg text-foreground">Level Up! 🎉</p>
+                <p className="text-sm text-accent">
                   {selectedAnswer === lesson.quiz?.correctIndex
-                    ? '+5 Stewardship Score'
-                    : 'Keep learning!'}
+                    ? '✨ +5 Stewardship Score Earned!'
+                    : '📚 Keep learning, you\'re doing great!'}
                 </p>
               </div>
             </div>
