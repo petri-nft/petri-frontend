@@ -95,31 +95,31 @@ const Landing = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-50 animate-fade-in-down">
+      <header className="border-b border-border bg-card/95 backdrop-blur-xl sticky top-0 z-50 animate-fade-in-down shadow-sm">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center animate-float">
-              <Sprout className="w-6 h-6 text-primary-foreground" />
+          <div className="flex items-center gap-3 group cursor-pointer">
+            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center animate-float-slow group-hover:animate-float transition-all duration-300 shadow-md">
+              <Sprout className="w-6 h-6 text-primary-foreground group-hover:scale-110 transition-transform duration-300" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-foreground">Petri</h1>
-              <p className="text-xs text-muted-foreground">Forest Keeper</p>
+              <h1 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors duration-300">Petri</h1>
+              <p className="text-xs text-muted-foreground group-hover:text-foreground transition-colors duration-300">Forest Keeper</p>
             </div>
           </div>
           
           <nav className="hidden md:flex items-center gap-6 text-sm">
-            <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">Features</a>
-            <a href="#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors">How It Works</a>
-            <a href="#your-forest" className="text-muted-foreground hover:text-foreground transition-colors">Your Forest</a>
+            <a href="#features" className="text-muted-foreground hover:text-primary transition-all duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-primary after:transition-all after:duration-300">Features</a>
+            <a href="#how-it-works" className="text-muted-foreground hover:text-primary transition-all duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-primary after:transition-all after:duration-300">How It Works</a>
+            <a href="#your-forest" className="text-muted-foreground hover:text-primary transition-all duration-300 relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 hover:after:w-full after:bg-primary after:transition-all after:duration-300">Your Forest</a>
           </nav>
           
           <div className="flex items-center gap-3">
             <Link to="/profile">
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="hover:rotate-12 transition-transform duration-300">
                 <User className="w-5 h-5" />
               </Button>
             </Link>
-            <Button variant="ghost" size="icon" onClick={handleLogout}>
+            <Button variant="ghost" size="icon" onClick={handleLogout} className="hover:-rotate-12 transition-transform duration-300">
               <LogOut className="w-5 h-5" />
             </Button>
           </div>
@@ -128,31 +128,33 @@ const Landing = () => {
       
       <main className="overflow-hidden">
         {/* Hero Section */}
-        <section className="relative py-20 md:py-32">
+        <section className="relative py-20 md:py-32 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
+          <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl animate-float-slow" />
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }} />
           <div className="container mx-auto px-4 text-center relative">
-            <Badge className="bg-accent/20 text-accent-foreground border-accent/30 mb-6 animate-fade-in">
+            <Badge className="bg-accent/20 text-accent-foreground border-accent/30 mb-6 animate-bounce-in hover:scale-110 transition-transform duration-300 cursor-default">
               🌱 The Future of Forest Stewardship
             </Badge>
-            <h2 className="text-5xl md:text-7xl font-bold text-foreground max-w-5xl mx-auto mb-6 animate-fade-in-up">
+            <h2 className="text-5xl md:text-7xl font-bold text-foreground max-w-5xl mx-auto mb-6 animate-fade-in-up leading-tight">
               Plant, Nurture, and Trade Living{' '}
-              <span className="text-primary">TreeTokens</span>
+              <span className="text-primary bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent animate-shimmer bg-[length:200%_100%]">TreeTokens</span>
             </h2>
-            <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-10 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+            <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-10 animate-fade-in-up leading-relaxed" style={{ animationDelay: '0.1s' }}>
               Transform real trees into dynamic digital assets. Learn AI-guided care from Sage, track health with real data, and trade fractional ownership in a transparent marketplace.
             </p>
             
             <div className="flex flex-wrap gap-4 justify-center animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
               <Link to="/plant">
-                <Button size="lg" className="bg-primary hover:bg-primary/90 text-lg px-8 py-6 group">
-                  <Sprout className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
+                <Button size="lg" className="bg-primary hover:bg-primary/90 text-lg px-8 py-6 group shadow-lg hover:shadow-xl">
+                  <Sprout className="w-5 h-5 mr-2 group-hover:scale-125 group-hover:rotate-12 transition-all duration-300" />
                   Plant Your First Tree
-                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-2 transition-all duration-300" />
                 </Button>
               </Link>
               <Link to="/trees">
-                <Button size="lg" variant="outline" className="text-lg px-8 py-6 group">
-                  <Trees className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
+                <Button size="lg" variant="outline" className="text-lg px-8 py-6 group shadow-md hover:shadow-lg">
+                  <Trees className="w-5 h-5 mr-2 group-hover:scale-125 group-hover:-rotate-12 transition-all duration-300" />
                   Explore Your Forest
                 </Button>
               </Link>
@@ -204,16 +206,16 @@ const Landing = () => {
               {features.map((feature, idx) => (
                 <Card 
                   key={idx}
-                  className="p-8 hover:shadow-strong transition-all duration-500 cursor-pointer group border-border/50 hover:border-primary/30 animate-fade-in-up"
+                  className="p-8 hover:shadow-strong hover:-translate-y-3 transition-all duration-500 cursor-pointer group border-border/50 hover:border-primary/30 animate-fade-in-up bg-gradient-to-br from-card to-card/50"
                   style={{ animationDelay: `${idx * 0.1}s` }}
                 >
-                  <div className={`w-16 h-16 rounded-2xl bg-${feature.color}/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
-                    <feature.icon className={`w-8 h-8 text-${feature.color}`} />
+                  <div className={`w-16 h-16 rounded-2xl bg-${feature.color}/10 flex items-center justify-center mb-6 group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 shadow-md group-hover:shadow-lg`}>
+                    <feature.icon className={`w-8 h-8 text-${feature.color} group-hover:scale-110 transition-transform duration-300`} />
                   </div>
-                  <h4 className="text-xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
+                  <h4 className="text-xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors duration-300">
                     {feature.title}
                   </h4>
-                  <p className="text-muted-foreground leading-relaxed">
+                  <p className="text-muted-foreground leading-relaxed group-hover:text-foreground transition-colors duration-300">
                     {feature.description}
                   </p>
                 </Card>
@@ -239,22 +241,22 @@ const Landing = () => {
               {steps.map((step, idx) => (
                 <Card 
                   key={idx}
-                  className="p-8 hover:shadow-strong transition-all duration-500 group border-l-4 border-primary/50 hover:border-primary animate-slide-in-left"
+                  className="p-8 hover:shadow-strong hover:translate-x-2 transition-all duration-500 group border-l-4 border-primary/50 hover:border-primary animate-slide-in-left bg-gradient-to-r from-card to-primary/5"
                   style={{ animationDelay: `${idx * 0.15}s` }}
                 >
                   <div className="flex items-start gap-6">
-                    <div className="text-6xl font-bold text-primary/20 group-hover:text-primary/40 transition-colors">
+                    <div className="text-6xl font-bold text-primary/20 group-hover:text-primary/60 group-hover:scale-110 transition-all duration-500">
                       {step.step}
                     </div>
                     <div className="flex-1">
-                      <h4 className="text-2xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
+                      <h4 className="text-2xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
                         {step.title}
                       </h4>
-                      <p className="text-muted-foreground text-lg">
+                      <p className="text-muted-foreground text-lg group-hover:text-foreground transition-colors duration-300">
                         {step.desc}
                       </p>
                     </div>
-                    <CheckCircle className="w-8 h-8 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <CheckCircle className="w-8 h-8 text-primary opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300" />
                   </div>
                 </Card>
               ))}
@@ -301,48 +303,48 @@ const Landing = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
               <Link to="/plant" className="animate-scale-in">
-                <Card className="p-8 hover:shadow-strong transition-all duration-500 cursor-pointer group hover:-translate-y-2 border-border/50 hover:border-primary/30">
-                  <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
-                    <Sprout className="w-8 h-8 text-primary" />
+                <Card className="p-8 hover:shadow-strong transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 border-border/50 hover:border-primary/50 bg-gradient-to-br from-card to-primary/5">
+                  <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 shadow-md group-hover:shadow-lg">
+                    <Sprout className="w-8 h-8 text-primary group-hover:scale-110 transition-transform" />
                   </div>
-                  <h4 className="text-xl font-semibold text-foreground mb-2">Plant a Tree</h4>
-                  <p className="text-sm text-muted-foreground">
+                  <h4 className="text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">Plant a Tree</h4>
+                  <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
                     Start your journey with a new tree
                   </p>
                 </Card>
               </Link>
               
               <Link to="/submit" className="animate-scale-in" style={{ animationDelay: '0.1s' }}>
-                <Card className="p-8 hover:shadow-strong transition-all duration-500 cursor-pointer group hover:-translate-y-2 border-border/50 hover:border-accent/30">
-                  <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
-                    <Camera className="w-8 h-8 text-accent-foreground" />
+                <Card className="p-8 hover:shadow-strong transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 border-border/50 hover:border-accent/50 bg-gradient-to-br from-card to-accent/5">
+                  <div className="w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center mb-6 group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 shadow-md group-hover:shadow-lg">
+                    <Camera className="w-8 h-8 text-accent-foreground group-hover:scale-110 transition-transform" />
                   </div>
-                  <h4 className="text-xl font-semibold text-foreground mb-2">Submit Progress</h4>
-                  <p className="text-sm text-muted-foreground">
+                  <h4 className="text-xl font-semibold text-foreground mb-2 group-hover:text-accent-foreground transition-colors">Submit Progress</h4>
+                  <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
                     Weekly photo update for your trees
                   </p>
                 </Card>
               </Link>
               
               <Link to="/chat" className="animate-scale-in" style={{ animationDelay: '0.2s' }}>
-                <Card className="p-8 hover:shadow-strong transition-all duration-500 cursor-pointer group hover:-translate-y-2 border-border/50 hover:border-secondary/30">
-                  <div className="w-16 h-16 rounded-2xl bg-secondary/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
-                    <MessageCircle className="w-8 h-8 text-secondary-foreground" />
+                <Card className="p-8 hover:shadow-strong transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 border-border/50 hover:border-secondary/50 bg-gradient-to-br from-card to-secondary/5">
+                  <div className="w-16 h-16 rounded-2xl bg-secondary/10 flex items-center justify-center mb-6 group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 shadow-md group-hover:shadow-lg">
+                    <MessageCircle className="w-8 h-8 text-secondary-foreground group-hover:scale-110 transition-transform" />
                   </div>
-                  <h4 className="text-xl font-semibold text-foreground mb-2">Chat with Sage</h4>
-                  <p className="text-sm text-muted-foreground">
+                  <h4 className="text-xl font-semibold text-foreground mb-2 group-hover:text-secondary-foreground transition-colors">Chat with Sage</h4>
+                  <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
                     Learn care tips from your AI companion
                   </p>
                 </Card>
               </Link>
               
               <Link to="/trade" className="animate-scale-in" style={{ animationDelay: '0.3s' }}>
-                <Card className="p-8 hover:shadow-strong transition-all duration-500 cursor-pointer group hover:-translate-y-2 border-border/50 hover:border-forest-earth/30">
-                  <div className="w-16 h-16 rounded-2xl bg-forest-earth/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
-                    <Store className="w-8 h-8 text-forest-earth" />
+                <Card className="p-8 hover:shadow-strong transition-all duration-500 cursor-pointer group hover:-translate-y-3 hover:scale-105 border-border/50 hover:border-forest-earth/50 bg-gradient-to-br from-card to-forest-earth/5">
+                  <div className="w-16 h-16 rounded-2xl bg-forest-earth/10 flex items-center justify-center mb-6 group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 shadow-md group-hover:shadow-lg">
+                    <Store className="w-8 h-8 text-forest-earth group-hover:scale-110 transition-transform" />
                   </div>
-                  <h4 className="text-xl font-semibold text-foreground mb-2">Marketplace</h4>
-                  <p className="text-sm text-muted-foreground">
+                  <h4 className="text-xl font-semibold text-foreground mb-2 group-hover:text-forest-earth transition-colors">Marketplace</h4>
+                  <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
                     Browse and trade TreeTokens
                   </p>
                 </Card>
