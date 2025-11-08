@@ -40,20 +40,15 @@ const Login = () => {
   };
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-accent/10 flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary)/0.1),transparent_50%)] animate-pulse" />
-      <div className="absolute top-20 left-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl animate-float" />
-      <div className="absolute bottom-20 right-20 w-80 h-80 bg-accent/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }} />
-      
-      <Card className="w-full max-w-md p-8 space-y-6 backdrop-blur-xl bg-card/80 border-2 border-primary/30 shadow-strong relative z-10 animate-scale-in">
+    <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-secondary/10 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md p-8 space-y-6">
         <div className="text-center space-y-2">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent mx-auto flex items-center justify-center mb-4 animate-glow-pulse shadow-glow">
+          <div className="w-16 h-16 rounded-2xl bg-primary mx-auto flex items-center justify-center mb-4">
             <Sprout className="w-8 h-8 text-primary-foreground" />
           </div>
-          <h1 className="text-3xl font-bold text-foreground bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Welcome to Petri</h1>
+          <h1 className="text-2xl font-bold text-foreground">Welcome to Petri</h1>
           <p className="text-sm text-muted-foreground">
-            Sign in to tend your digital forest
+            Sign in to tend your forest
           </p>
         </div>
         
