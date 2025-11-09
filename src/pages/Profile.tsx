@@ -5,12 +5,15 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowLeft, User, Trees, Award, Store } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { ArrowLeft, User, Trees, Award, Store, Search } from 'lucide-react';
+import { useState } from 'react';
 
 const Profile = () => {
   const navigate = useNavigate();
   const { username } = useParams();
   const { user, trees } = useStore();
+  const [searchQuery, setSearchQuery] = useState('');
   
   // For now, only show current user's profile
   const isOwn = !username || username === user?.displayName.toLowerCase().replace(' ', '-');
@@ -27,8 +30,16 @@ const Profile = () => {
     const userId = profileUser?.id;
     return treeOwnerId === userId;
   });
-  const ownedTrees = userTrees.filter(t => !t.listed);
-  const listedTrees = userTrees.filter(t => t.listed);
+  
+  // Filter by search query
+  const filteredUserTrees = userTrees.filter(tree => {
+    const matchesSearch = tree.nickname?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      tree.species.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesSearch;
+  });
+  
+  const ownedTrees = filteredUserTrees.filter(t => !t.listed);
+  const listedTrees = filteredUserTrees.filter(t => t.listed);
   
   const avgHealth = userTrees.length > 0
     ? Math.round(userTrees.reduce((sum, t) => sum + t.healthIndex, 0) / userTrees.length)
@@ -105,6 +116,18 @@ const Profile = () => {
         </div>
         
         {/* Trees Gallery */}
+        <div className="mb-6">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              placeholder="Search by species or nickname..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+        </div>
+        
         <Tabs defaultValue="owned" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="owned">

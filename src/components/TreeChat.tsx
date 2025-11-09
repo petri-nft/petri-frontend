@@ -20,8 +20,10 @@ export const TreeChat = ({ treeId, treeName = 'Tree', personality }: TreeChatPro
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [loadingHistory, setLoadingHistory] = useState(true);
-  const [includeAudio, setIncludeAudio] = useState(false);
+  const [includeAudio, setIncludeAudio] = useState(true);
+  const [playingAudioId, setPlayingAudioId] = useState<number | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Load chat history
   useEffect(() => {
@@ -80,9 +82,10 @@ export const TreeChat = ({ treeId, treeName = 'Tree', personality }: TreeChatPro
           created_at: new Date().toISOString(),
         };
 
-        // Add tree response
+        // Add tree response with new message ID
+        const responseId = Date.now() + 1;
         const treeMsg: ChatMessage_AI = {
-          id: Date.now() + 1,
+          id: responseId,
           tree_id: treeId,
           user_id: 0,
           role: 'assistant',
@@ -93,9 +96,10 @@ export const TreeChat = ({ treeId, treeName = 'Tree', personality }: TreeChatPro
 
         setMessages((prev) => [...prev, userMsg, treeMsg]);
 
-        // Play audio if available
+        // Auto-play audio immediately if available
         if (typed.audio_url && includeAudio) {
-          playAudio(typed.audio_url);
+          setPlayingAudioId(responseId);
+          playAudio(typed.audio_url, responseId);
         }
       }
     } catch (error) {
@@ -111,16 +115,58 @@ export const TreeChat = ({ treeId, treeName = 'Tree', personality }: TreeChatPro
     }
   };
 
-  const playAudio = (url: string) => {
-    const audio = new Audio(url);
-    audio.play().catch((error) => {
-      console.error('Error playing audio:', error);
+  const playAudio = (url: string, messageId?: number) => {
+    try {
+      // Stop previous audio if playing
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+
+      const audio = new Audio(url);
+      audioRef.current = audio;
+      
+      // Track which message is playing
+      if (messageId) {
+        setPlayingAudioId(messageId);
+      }
+      
+      // Clear playing status when audio ends
+      audio.onended = () => {
+        setPlayingAudioId(null);
+        audioRef.current = null;
+      };
+      
+      // Clear on error too
+      audio.onerror = () => {
+        setPlayingAudioId(null);
+        audioRef.current = null;
+        console.error('Error playing audio:', audio.error);
+        toast({
+          title: 'Audio Playback Error',
+          description: 'Could not play tree response audio',
+          variant: 'destructive',
+        });
+      };
+      
+      audio.play().catch((error) => {
+        console.error('Error playing audio:', error);
+        setPlayingAudioId(null);
+        audioRef.current = null;
+        toast({
+          title: 'Audio Playback Error',
+          description: 'Could not play tree response audio',
+          variant: 'destructive',
+        });
+      });
+    } catch (error) {
+      console.error('Error in playAudio:', error);
       toast({
-        title: 'Audio Playback Error',
-        description: 'Could not play tree response audio',
+        title: 'Audio Error',
+        description: 'Could not play audio',
         variant: 'destructive',
       });
-    });
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -177,11 +223,15 @@ export const TreeChat = ({ treeId, treeName = 'Tree', personality }: TreeChatPro
                   <p className="text-sm break-words">{message.content}</p>
                   {message.audio_url && message.role === 'assistant' && (
                     <button
-                      onClick={() => playAudio(message.audio_url!)}
-                      className="mt-2 inline-flex items-center gap-1 text-xs px-2 py-1 rounded bg-black/20 hover:bg-black/30 transition-colors"
+                      onClick={() => playAudio(message.audio_url!, message.id)}
+                      className={`mt-2 inline-flex items-center gap-1 text-xs px-3 py-1 rounded transition-all ${
+                        playingAudioId === message.id
+                          ? 'bg-primary text-primary-foreground animate-pulse'
+                          : 'bg-black/20 hover:bg-black/30 text-foreground'
+                      }`}
                     >
                       <Volume2 className="w-3 h-3" />
-                      Play
+                      {playingAudioId === message.id ? 'Playing...' : 'Replay'}
                     </button>
                   )}
                   <p className="text-xs opacity-70 mt-1">

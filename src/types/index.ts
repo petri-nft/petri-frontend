@@ -21,6 +21,8 @@ export type Tree = {
   health_score?: number; // 0-100
   current_value?: number;
   description?: string;
+  photo_url?: string; // URL to captured photo
+  nft_image_url?: string; // URL to generated NFT image
   created_at?: string;
   updated_at?: string;
   

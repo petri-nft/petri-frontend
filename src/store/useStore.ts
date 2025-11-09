@@ -59,24 +59,27 @@ export const useStore = create<AppState>((set, get) => ({
   login: async (email: string, password: string) => {
     try {
       set({ isLoading: true });
-      const response: any = await apiClient.login(email, password);
+      const response = (await apiClient.login(email, password)) as Record<string, unknown>;
       
       const user: User = {
         id: String(response.user_id || response.id || '1'),
         email,
-        displayName: response.username || email.split('@')[0],
+        displayName: (response.username as string) || email.split('@')[0],
         createdAt: new Date().toISOString(),
       };
       
       // Store user to localStorage
       localStorage.setItem('user', JSON.stringify(user));
       
+      // Store token to localStorage
+      localStorage.setItem('auth_token', response.access_token as string);
+      
       // CRITICAL: Set token in apiClient so subsequent requests include Authorization header
-      apiClient.setToken(response.access_token);
+      apiClient.setToken(response.access_token as string);
       
       set({ 
         user, 
-        token: response.access_token,
+        token: response.access_token as string,
         trees: [],
       });
       
@@ -95,7 +98,7 @@ export const useStore = create<AppState>((set, get) => ({
   register: async (email: string, password: string, displayName: string) => {
     try {
       set({ isLoading: true });
-      const response: any = await apiClient.register(email, password, displayName);
+      const response = (await apiClient.register(email, password, displayName)) as Record<string, unknown>;
       
       const user: User = {
         id: String(response.user_id || response.id || '1'),
@@ -107,12 +110,15 @@ export const useStore = create<AppState>((set, get) => ({
       // Store user to localStorage
       localStorage.setItem('user', JSON.stringify(user));
       
+      // Store token to localStorage
+      localStorage.setItem('auth_token', response.access_token as string);
+      
       // CRITICAL: Set token in apiClient so subsequent requests include Authorization header
-      apiClient.setToken(response.access_token);
+      apiClient.setToken(response.access_token as string);
       
       set({ 
         user, 
-        token: response.access_token,
+        token: response.access_token as string,
         trees: [],
       });
       
@@ -141,6 +147,39 @@ export const useStore = create<AppState>((set, get) => ({
       // Backend returns array of TreeListResponse objects
       const treesArray = (Array.isArray(response) ? response : (response as Record<string, unknown>).trees || []) as unknown[];
       
+      // Load stored photos from localStorage (maps photo_id -> base64)
+      const storedPhotos: Record<string, string> = {};
+      try {
+        const photosMap = localStorage.getItem('tree_photos');
+        if (photosMap) {
+          Object.assign(storedPhotos, JSON.parse(photosMap));
+        }
+      } catch (e) {
+        console.error('Failed to load stored photos:', e);
+      }
+      
+      // Load tree photo map (maps tree_id -> base64 photo)
+      const treePhotoMap: Record<string, string> = {};
+      try {
+        const photoMap = localStorage.getItem('tree_photo_map');
+        if (photoMap) {
+          Object.assign(treePhotoMap, JSON.parse(photoMap));
+        }
+      } catch (e) {
+        console.error('Failed to load tree photo map:', e);
+      }
+      
+      // Load stored NFT images from localStorage
+      const storedNftImages: Record<string, string> = {};
+      try {
+        const nftImagesMap = localStorage.getItem('tree_nft_images');
+        if (nftImagesMap) {
+          Object.assign(storedNftImages, JSON.parse(nftImagesMap));
+        }
+      } catch (e) {
+        console.error('Failed to load stored NFT images:', e);
+      }
+      
       // Try to load persisted state for user actions (water, progress, listing)
       const persistedState: Record<string, Partial<Tree>> = {};
       try {
@@ -160,12 +199,21 @@ export const useStore = create<AppState>((set, get) => ({
         const tObj = t as Record<string, unknown>;
         const persisted = persistedState[String(tObj.id)];
         const userId = tObj.user_id as number;
+        const treeId = String(tObj.id);
+        const treeIdNum = Number(treeId);
+        
+        // Get stored photo using tree ID mapping (maps tree_id -> actual base64 photo)
+        const treePhoto = treePhotoMap[treeIdNum];
+        // Get stored NFT image if it exists
+        const storedNftImage = storedNftImages[treeId] || (tObj.nft_image_url as string);
+        
         return {
-          id: String(tObj.id),
+          id: treeId,
           user_id: userId,
           ownerId: userId,
           ownerName: get().user?.displayName || 'Unknown',
           species: tObj.species as string,
+          nickname: tObj.nickname as string | undefined,
           latitude: tObj.latitude as number,
           longitude: tObj.longitude as number,
           location_name: tObj.location_name as string,
@@ -179,7 +227,14 @@ export const useStore = create<AppState>((set, get) => ({
           lastWateredAt: persisted?.lastWateredAt,
           listed: persisted?.listed || false,
           price: persisted?.price,
-          photos: [],
+          // Use tree photo if available, otherwise empty
+          photos: treePhoto ? [{
+            id: 'captured',
+            url: treePhoto,
+            takenAt: new Date().toISOString(),
+            note: 'Captured photo'
+          }] : [],
+          nft_image_url: storedNftImage,
           created_at: tObj.created_at as string,
           updated_at: tObj.updated_at as string,
         };

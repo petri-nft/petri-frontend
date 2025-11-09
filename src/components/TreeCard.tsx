@@ -19,13 +19,18 @@ export const TreeCard = ({ tree, onWater, onChat, onTrade, compact = false }: Tr
   const latestPhoto = tree.photos[tree.photos.length - 1];
   const lastWatered = tree.lastWateredAt ? getRelativeTime(tree.lastWateredAt) : 'Never';
   
+  // Display NFT image if available, otherwise photo, otherwise placeholder
+  const displayImage = tree.nft_image_url || latestPhoto?.url || 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800';
+  // Display tree nickname if available, otherwise species
+  const displayName = tree.nickname || tree.species;
+  
   return (
     <Card className="overflow-hidden hover:shadow-strong hover:-translate-y-2 transition-all duration-500 bg-card group border-border hover:border-primary/50">
       <Link to={`/trees/${tree.id}`}>
         <div className="relative h-48 overflow-hidden bg-gradient-to-br from-primary/5 to-accent/5">
           <img
-            src={latestPhoto?.url || 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800'}
-            alt={tree.nickname || tree.species}
+            src={displayImage}
+            alt={displayName}
             className="w-full h-full object-cover group-hover:scale-110 group-hover:rotate-1 transition-all duration-700 ease-out"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -44,7 +49,7 @@ export const TreeCard = ({ tree, onWater, onChat, onTrade, compact = false }: Tr
         <div>
           <Link to={`/trees/${tree.id}`}>
             <h3 className="font-semibold text-lg text-foreground group-hover:text-primary transition-colors duration-300">
-              {tree.nickname || tree.species}
+              {displayName}
             </h3>
           </Link>
           <p className="text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-300">{tree.species}</p>
@@ -86,7 +91,7 @@ export const TreeCard = ({ tree, onWater, onChat, onTrade, compact = false }: Tr
                 className="flex-1 group/btn hover:border-primary/50 hover:bg-primary/5 transition-all duration-300"
                 onClick={(e) => {
                   e.preventDefault();
-                  onWater(tree.id);
+                  onWater(String(tree.id));
                 }}
               >
                 <Droplet className="w-3.5 h-3.5 mr-1 group-hover/btn:scale-110 group-hover/btn:text-primary transition-all duration-300" />
@@ -100,7 +105,7 @@ export const TreeCard = ({ tree, onWater, onChat, onTrade, compact = false }: Tr
                 className="flex-1 group/btn hover:border-accent/50 hover:bg-accent/5 transition-all duration-300"
                 onClick={(e) => {
                   e.preventDefault();
-                  onChat(tree.id);
+                  onChat(String(tree.id));
                 }}
               >
                 <MessageCircle className="w-3.5 h-3.5 mr-1 group-hover/btn:scale-110 group-hover/btn:text-accent-foreground transition-all duration-300" />
@@ -114,7 +119,7 @@ export const TreeCard = ({ tree, onWater, onChat, onTrade, compact = false }: Tr
                 className="flex-1 group/btn hover:border-secondary/50 hover:bg-secondary/5 transition-all duration-300"
                 onClick={(e) => {
                   e.preventDefault();
-                  onTrade(tree.id);
+                  onTrade(String(tree.id));
                 }}
               >
                 <Store className="w-3.5 h-3.5 mr-1 group-hover/btn:scale-110 group-hover/btn:text-secondary-foreground transition-all duration-300" />

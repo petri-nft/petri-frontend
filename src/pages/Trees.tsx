@@ -20,7 +20,7 @@ const Trees = () => {
   // Fetch trees on mount
   useEffect(() => {
     fetchTrees();
-  }, []);
+  }, [fetchTrees]);
   
   const handleWater = (treeId: string) => {
     waterTree(treeId);
@@ -34,9 +34,9 @@ const Trees = () => {
   const userTrees = trees.filter(t => String(t.ownerId) === user?.id);
   
   // Filter and sort
-  let filteredTrees = userTrees.filter(tree => {
-    const matchesSearch = tree.species.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      tree.nickname?.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredTrees = userTrees.filter(tree => {
+    const matchesSearch = tree.nickname?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      tree.species.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesSpecies = !filterSpecies || tree.species === filterSpecies;
     return matchesSearch && matchesSpecies;
   });
@@ -105,7 +105,7 @@ const Trees = () => {
             
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
+              onChange={(e) => setSortBy(e.target.value as 'newest' | 'health' | 'species')}
               className="px-4 py-2 border border-input rounded-lg bg-background"
             >
               <option value="newest">Newest First</option>

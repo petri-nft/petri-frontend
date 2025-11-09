@@ -51,6 +51,19 @@ class ApiClient {
       headers,
     });
 
+    // Handle 401 Unauthorized - token expired
+    if (response.status === 401) {
+      // Clear the expired token
+      this.setToken(null);
+      
+      // Redirect to login
+      if (typeof window !== 'undefined') {
+        window.location.href = '/login';
+      }
+      
+      throw new Error('Your session has expired. Please log in again.');
+    }
+
     if (!response.ok) {
       let errorMessage = `HTTP ${response.status}`;
       try {
@@ -96,6 +109,8 @@ class ApiClient {
     species: string;
     latitude: number;
     longitude: number;
+    nickname: string;
+    photo_url?: string;
     location_name?: string;
     description?: string;
   }) {

@@ -69,6 +69,7 @@ export const TreePersonalityComponent = ({
     background: '',
     traits: {} as Record<string, string | number | boolean>,
   });
+  const [initialized, setInitialized] = useState(false);
 
   // Load current personality
   useEffect(() => {
@@ -78,17 +79,19 @@ export const TreePersonalityComponent = ({
         const typed = response as TreePersonality;
         if (typed && 'id' in typed) {
           setCurrentPersonality(typed);
-          // CRITICAL: Call the callback to update parent component state
-          onPersonalitySet(typed);
           setFormData({
             name: typed.name,
             tone: typed.tone,
             background: typed.background,
-            traits: typed.traits,
+            traits: typed.traits || {},
           });
+          setInitialized(true);
         }
       } catch (error) {
-        // No personality set yet, which is fine
+        // No personality set yet, which is fine - use defaults
+        console.log('No personality found, will use default or new one');
+        setCurrentPersonality(null);
+        setInitialized(true);
       }
     };
 
@@ -104,9 +107,18 @@ export const TreePersonalityComponent = ({
       }
     };
 
-    loadPersonality();
-    loadVoices();
-  }, [treeId, onPersonalitySet]);
+    if (!initialized) {
+      loadPersonality();
+      loadVoices();
+    }
+  }, [treeId, initialized]);
+
+  // Notify parent when personality loads (separate effect to avoid loops)
+  useEffect(() => {
+    if (initialized && currentPersonality && onPersonalitySet) {
+      onPersonalitySet(currentPersonality);
+    }
+  }, [currentPersonality, initialized, onPersonalitySet]);
 
   const handleSavePersonality = async () => {
     if (!formData.name.trim() || !formData.background.trim()) {
@@ -127,15 +139,47 @@ export const TreePersonalityComponent = ({
         traits: formData.traits,
       });
 
+      // Handle response - could be different formats
+      let savedPersonality: TreePersonality | null = null;
+      const resp = response as Record<string, unknown>;
+      
+      if (response && typeof response === 'object') {
+        // If response has personality data, use it
+        if (resp.personality && typeof resp.personality === 'object') {
+          const personality = resp.personality as Record<string, unknown>;
+          if ('id' in personality) {
+            savedPersonality = resp.personality as TreePersonality;
+          }
+        }
+        // Otherwise create a personality object from the form data
+        else if (resp.personality_id) {
+          savedPersonality = {
+            id: resp.personality_id as number,
+            tree_id: treeId,
+            name: formData.name,
+            tone: formData.tone,
+            background: formData.background,
+            traits: formData.traits,
+            voice_id: (resp.voice_id as string) || '',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          } as TreePersonality;
+        }
+      }
+
       toast({
         title: '🎉 Personality Set!',
         description: `${formData.name} is ready to chat!`,
       });
 
-      setCurrentPersonality(response as TreePersonality);
+      if (savedPersonality) {
+        setCurrentPersonality(savedPersonality);
+        onPersonalitySet(savedPersonality);
+      }
+      
       setIsEditing(false);
-      onPersonalitySet(response as TreePersonality);
     } catch (error) {
+      console.error('Error saving personality:', error);
       toast({
         title: 'Error',
         description: error instanceof Error ? error.message : 'Failed to set personality',
@@ -178,6 +222,19 @@ export const TreePersonalityComponent = ({
     );
   }
 
+  // Show loading state while initializing
+  if (!initialized) {
+    return (
+      <Card className="p-6 bg-card/50">
+        <div className="flex items-center gap-2">
+          <Loader2 className="w-4 h-4 animate-spin" />
+          <p className="text-muted-foreground">Loading personality...</p>
+        </div>
+      </Card>
+    );
+  }
+
+  // Show existing personality view
   if (!isEditing && currentPersonality) {
     return (
       <Card className="p-6 bg-card/50">

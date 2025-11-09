@@ -22,7 +22,7 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const AppContent = () => {
-  const { setUser, fetchTrees, user } = useStore();
+  const { setUser, fetchTrees, user, login } = useStore();
   const [isInitialized, setIsInitialized] = useState(false);
 
   // Restore session from localStorage on mount
@@ -38,6 +38,15 @@ const AppContent = () => {
           setUser(savedUser);
           // Fetch trees for the restored user
           await fetchTrees();
+        } else {
+          // Auto-login with test credentials for development
+          console.log('No session found, attempting auto-login...');
+          const result = await login('alice', 'password123');
+          if (!result.success) {
+            console.warn('Auto-login failed:', result.error);
+          } else {
+            console.log('Auto-login successful');
+          }
         }
       } catch (error) {
         console.error('Failed to restore session:', error);
