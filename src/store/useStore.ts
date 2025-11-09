@@ -71,6 +71,9 @@ export const useStore = create<AppState>((set, get) => ({
       // Store user to localStorage
       localStorage.setItem('user', JSON.stringify(user));
       
+      // CRITICAL: Set token in apiClient so subsequent requests include Authorization header
+      apiClient.setToken(response.access_token);
+      
       set({ 
         user, 
         token: response.access_token,
@@ -103,6 +106,9 @@ export const useStore = create<AppState>((set, get) => ({
       
       // Store user to localStorage
       localStorage.setItem('user', JSON.stringify(user));
+      
+      // CRITICAL: Set token in apiClient so subsequent requests include Authorization header
+      apiClient.setToken(response.access_token);
       
       set({ 
         user, 
