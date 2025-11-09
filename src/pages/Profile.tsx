@@ -21,7 +21,12 @@ const Profile = () => {
     return null;
   }
   
-  const userTrees = trees.filter(t => t.ownerId === profileUser.id);
+  const userTrees = trees.filter(t => {
+    // Handle both backend (user_id) and frontend (ownerId) formats
+    const treeOwnerId = (t.user_id || t.ownerId);
+    const userId = profileUser?.id;
+    return treeOwnerId === userId;
+  });
   const ownedTrees = userTrees.filter(t => !t.listed);
   const listedTrees = userTrees.filter(t => t.listed);
   

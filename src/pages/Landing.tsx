@@ -41,7 +41,7 @@ const Landing = () => {
     navigate('/login');
   };
   
-  const userTrees = trees.filter(t => t.ownerId === user?.id);
+  const userTrees = trees.filter(t => String(t.ownerId) === user?.id);
   const totalHealthAvg = userTrees.length > 0
     ? Math.round(userTrees.reduce((sum, t) => sum + t.healthIndex, 0) / userTrees.length)
     : 0;

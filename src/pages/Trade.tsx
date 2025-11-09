@@ -18,8 +18,8 @@ const Trade = () => {
   const [sortBy, setSortBy] = useState<'price' | 'health' | 'newest'>('newest');
   
   const listedTrees = trees.filter(t => t.listed);
-  const myListedTrees = listedTrees.filter(t => t.ownerId === user?.id);
-  const othersListedTrees = listedTrees.filter(t => t.ownerId !== user?.id);
+  const myListedTrees = listedTrees.filter(t => String(t.ownerId) === user?.id);
+  const othersListedTrees = listedTrees.filter(t => String(t.ownerId) !== user?.id);
   
   // Filter and sort
   let filteredTrees = othersListedTrees.filter(tree => {

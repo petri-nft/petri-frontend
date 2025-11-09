@@ -11,17 +11,21 @@ import { ArrowLeft, Camera, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { generateId } from '@/lib/utils/helpers';
 import { Tree } from '@/types';
+import { apiClient } from '@/lib/api';
 
-const SPECIES = [
-  'Coast Redwood',
-  'Japanese Maple',
-  'White Oak',
-  'Blue Spruce',
-  'Weeping Willow',
-  'Douglas Fir',
-  'Sugar Maple',
-  'Black Walnut',
-];
+// Mapping of display names to backend enum values
+const SPECIES_MAP: Record<string, string> = {
+  'Coast Redwood': 'spruce',
+  'Japanese Maple': 'maple',
+  'White Oak': 'oak',
+  'Blue Spruce': 'spruce',
+  'Weeping Willow': 'elm',
+  'Douglas Fir': 'spruce',
+  'Sugar Maple': 'maple',
+  'Black Walnut': 'elm',
+};
+
+const SPECIES = Object.keys(SPECIES_MAP);
 
 const SIZES = ['Seedling (< 1 ft)', 'Sapling (2-3 ft)', 'Young tree (4-6 ft)', 'Established (6+ ft)'];
 const LIGHT_NEEDS = ['Full sun', 'Partial shade', 'Full shade'];
@@ -29,7 +33,7 @@ const SOIL_TYPES = ['Sandy', 'Loamy', 'Clay', 'Well-draining', 'Moist'];
 
 const PlantTree = () => {
   const navigate = useNavigate();
-  const { user, addTree } = useStore();
+  const { user, addTree, fetchTrees } = useStore();
   const { toast } = useToast();
   
   const [species, setSpecies] = useState('');
@@ -61,43 +65,85 @@ const PlantTree = () => {
     
     setIsSubmitting(true);
     
-    const newTree: Tree = {
-      id: generateId(),
-      ownerId: user!.id,
-      ownerName: user!.displayName,
-      species,
-      nickname: nickname || undefined,
-      location: location ? { label: location } : undefined,
-      plantedAt: new Date().toISOString(),
-      healthIndex: 100,
-      photos: [
-        {
-          id: generateId(),
-          url: photoUrl,
-          takenAt: new Date().toISOString(),
-          note: 'First planting!',
+    try {
+      // Map display name to backend enum value
+      const backendSpecies = SPECIES_MAP[species] || species.toLowerCase();
+      
+      // Prepare tree data for backend
+      const treeData = {
+        species: backendSpecies,
+        latitude: 0, // Default location
+        longitude: 0,
+        location_name: location || 'Unknown Location',
+        description: nickname || `A beautiful ${species}`,
+      };
+      
+      // Create tree on backend
+      const response = await apiClient.plantTree(treeData);
+      const backendTree = response as any;
+      
+      // Create frontend tree object with response data, mapping backend fields to frontend format
+      const newTree: Tree = {
+        id: String(backendTree.id), // Convert to string for consistency
+        user_id: backendTree.user_id,
+        ownerId: backendTree.user_id,
+        ownerName: user!.displayName,
+        species,
+        nickname: nickname || undefined,
+        location: location ? { label: location } : undefined,
+        location_name: backendTree.location_name,
+        plantedAt: backendTree.planting_date,
+        planting_date: backendTree.planting_date,
+        healthIndex: backendTree.health_score,
+        health_score: backendTree.health_score,
+        current_value: backendTree.current_value,
+        photos: [
+          {
+            id: generateId(),
+            url: photoUrl,
+            takenAt: new Date().toISOString(),
+            note: 'First planting!',
+          },
+        ],
+        careIndex: 0,
+        stewardshipScore: 0,
+        tokenId: `TT-${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
+        characteristics: {
+          size,
+          light,
+          soilType,
         },
-      ],
-      careIndex: 0,
-      stewardshipScore: 0,
-      tokenId: `TT-${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
-      characteristics: {
-        size,
-        light,
-        soilType,
-      },
-    };
-    
-    addTree(newTree);
-    
-    toast({
-      title: 'Tree Planted! 🌱',
-      description: `${newTree.nickname || newTree.species} has been added to your forest`,
-    });
-    
-    setTimeout(() => {
-      navigate(`/trees/${newTree.id}`);
-    }, 500);
+        created_at: backendTree.created_at,
+        updated_at: backendTree.updated_at,
+      };
+      
+      // Add tree to store immediately
+      addTree(newTree);
+      
+      toast({
+        title: 'Tree Planted! 🌱',
+        description: `Your ${species} has been added to your forest`,
+      });
+      
+      // Refresh trees from backend to ensure sync
+      setTimeout(async () => {
+        await fetchTrees();
+      }, 500);
+      
+      // Navigate back to trees list
+      setTimeout(() => {
+        navigate('/trees');
+      }, 1000);
+    } catch (error) {
+      console.error('Failed to plant tree:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Failed to plant tree. Please try again.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   
   return (

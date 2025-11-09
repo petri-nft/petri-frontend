@@ -9,8 +9,8 @@ import { Sprout } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('alice');
+  const [password, setPassword] = useState('password123');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useStore();
@@ -20,22 +20,30 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     
-    const result = await login(email, password);
-    
-    setIsLoading(false);
-    
-    if (result.success) {
-      toast({
-        title: 'Welcome back! 🌲',
-        description: 'Successfully logged in',
-      });
-      navigate('/');
-    } else {
+    try {
+      const result = await login(username, password);
+      
+      if (result.success) {
+        toast({
+          title: 'Welcome back! 🌲',
+          description: 'Successfully logged in',
+        });
+        navigate('/');
+      } else {
+        toast({
+          variant: 'destructive',
+          title: 'Login Failed',
+          description: result.error || 'Invalid credentials',
+        });
+      }
+    } catch (error) {
       toast({
         variant: 'destructive',
-        title: 'Login Failed',
-        description: result.error || 'Invalid credentials',
+        title: 'Error',
+        description: 'An error occurred during login',
       });
+    } finally {
+      setIsLoading(false);
     }
   };
   
@@ -54,13 +62,13 @@ const Login = () => {
         
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="username">Username</Label>
             <Input
-              id="email"
-              type="email"
-              placeholder="demo@tree.shares"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              id="username"
+              type="text"
+              placeholder="alice"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
               className="bg-background"
             />
@@ -78,7 +86,7 @@ const Login = () => {
               className="bg-background"
             />
             <p className="text-xs text-muted-foreground">
-              Demo: demo@tree.shares / demo123
+              Demo: alice / password123 or bob / password123
             </p>
           </div>
           

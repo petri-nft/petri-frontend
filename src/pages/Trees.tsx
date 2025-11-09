@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '@/store/useStore';
 import { TreeCard } from '@/components/TreeCard';
@@ -10,12 +10,17 @@ import { useToast } from '@/hooks/use-toast';
 
 const Trees = () => {
   const navigate = useNavigate();
-  const { user, trees, waterTree } = useStore();
+  const { user, trees, waterTree, fetchTrees, isLoading } = useStore();
   const { toast } = useToast();
   
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'newest' | 'health' | 'species'>('newest');
   const [filterSpecies, setFilterSpecies] = useState('');
+  
+  // Fetch trees on mount
+  useEffect(() => {
+    fetchTrees();
+  }, []);
   
   const handleWater = (treeId: string) => {
     waterTree(treeId);
@@ -25,7 +30,8 @@ const Trees = () => {
     });
   };
   
-  const userTrees = trees.filter(t => t.ownerId === user?.id);
+  // Filter to user's trees - convert IDs to strings for comparison
+  const userTrees = trees.filter(t => String(t.ownerId) === user?.id);
   
   // Filter and sort
   let filteredTrees = userTrees.filter(tree => {
@@ -46,6 +52,14 @@ const Trees = () => {
   });
   
   const species = Array.from(new Set(userTrees.map(t => t.species)));
+  
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-muted-foreground">Loading your forest...</p>
+      </div>
+    );
+  }
   
   return (
     <div className="min-h-screen bg-background pb-12">

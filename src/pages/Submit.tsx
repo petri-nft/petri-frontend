@@ -23,7 +23,7 @@ const Submit = () => {
   const [showCamera, setShowCamera] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const userTrees = trees.filter(t => t.ownerId === user?.id);
+  const userTrees = trees.filter(t => String(t.ownerId) === user?.id);
   const selectedTree = trees.find(t => t.id === selectedTreeId);
   
   useEffect(() => {
