@@ -1,57 +1,79 @@
-# Petri - TreeToken Platform MVP
+# Petri Frontend
 
-**Tagline:** Plant a tree → mint a digital TreeToken → learn to care with AI → trace its health → trade/own fractional shares.
+React platform for tree NFTs with AI chat, health tracking, and marketplace.
 
-## 🌳 Overview
-
-Petri is a full-stack React application that combines reforestation with blockchain-style tokenization and AI-guided education. Each planted tree becomes a dynamic TreeToken (NFT-like card) with real health metrics, care logs, and educational lessons from Sage, your friendly AI companion.
-
-## ✨ Features
-
-### Core Functionality
-- **🌱 Plant Trees**: Use your camera to capture a tree, add species/location details, and mint a TreeToken
-- **📊 Health Tracking**: Monitor tree health with visual indices (0-100%), NDVI trends, and care logs
-- **💧 Care Actions**: Water trees, submit weekly photo updates, track care indices
-- **🤖 Sage AI Companion**: Chat with Sage for care tips and complete micro-lessons (60-90s) with quizzes
-- **🏪 Marketplace**: List trees for sale, browse listings, simulate trading (buy/sell)
-- **👤 Profile**: Creator gallery showing all owned and listed trees with stats
-
-### Technical Stack
-- **Frontend**: React 18, TypeScript, Tailwind CSS, Vite
-- **UI Components**: shadcn/ui, Headless UI, Lucide icons
-- **State Management**: Zustand
-- **Routing**: React Router v6
-- **Camera**: Browser getUserMedia API
-- **Data**: Mock in-memory store (ready for backend integration)
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js 16+ and npm
-
-### Installation
+## Quick Start
 
 ```bash
-# Clone the repository
-git clone <YOUR_GIT_URL>
-cd petri
-
-# Install dependencies
 npm install
-
-# Start development server
-npm run dev
+npm run dev        # http://localhost:5173
+npm run build      # Production build
 ```
 
-The app will be available at `http://localhost:8080`
+## Tech Stack
 
-### Demo Account
+- React 18 + TypeScript
+- Vite, Tailwind CSS
+- Zustand (state management)
+- React Router
+- shadcn/ui components
+
+## Features
+
+- User authentication with JWT
+- Plant and manage trees
+- AI chat with personality responses
+- Real-time health tracking
+- Tree marketplace
+- User profile and portfolio
+- Camera integration for tree photos
+
+## Project Structure
+
 ```
-Email: demo@tree.shares
-Password: demo123
+src/
+├── components/       # Reusable components
+│   ├── TreeChat.tsx
+│   ├── TreePersonalitySetup.tsx
+│   └── ui/          # shadcn/ui
+├── pages/           # Route pages
+│   ├── Landing.tsx
+│   ├── Login.tsx
+│   ├── PlantTree.tsx
+│   ├── Trees.tsx
+│   ├── TreeDetail.tsx
+│   └── Profile.tsx
+├── lib/
+│   ├── api.ts       # API client
+│   └── utils.ts
+├── store/           # Zustand state
+└── types/
 ```
 
-This account includes 2 seeded trees with mock data for testing.
+## Environment
+
+```
+VITE_API_URL=http://localhost:8000/api
+```
+
+## API Endpoints
+
+- `/api/auth/*` - Authentication
+- `/api/trees/*` - Tree management
+- `/api/trees/{id}/chat` - AI chat
+- `/api/trees/{id}/personality` - Personality setup
+- `/api/trees/{id}/transcribe-voice` - Voice transcription
+
+## Routes
+
+- `/` - Home
+- `/login` - Login
+- `/register` - Register
+- `/trees` - Tree list
+- `/trees/:id` - Tree detail
+- `/plant` - Plant tree
+- `/profile` - User profile
+- `/chat` - Chat interface
 
 ## 📱 Pages & Routes
 
