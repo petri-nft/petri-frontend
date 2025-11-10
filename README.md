@@ -148,16 +148,6 @@ Trees earn badges as they improve:
 - 🟢 **Good** (61-80%): Thriving well
 - 💚 **Excellent** (81-100%): Peak health
 
----
-
-## 📱 Mobile Optimization
-
-- Camera integration for native tree photos
-- Touch-optimized gestures
-- Responsive design (mobile-first)
-- PWA-ready architecture (coming soon)
-
----
 
 ## 🧪 Testing
 
