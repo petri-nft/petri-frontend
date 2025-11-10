@@ -1,6 +1,6 @@
 # 🌳 Petri Frontend
 
-> Your tree, your pet, your legacy—powered by real data.
+> Your tree, your pet, your legacy
 
 A gamified tree stewardship platform that transforms environmental action into an engaging experience. Plant real trees, mint dynamic NFTs, and nurture your TreeToken through AI-guided care powered by satellite data.
 
