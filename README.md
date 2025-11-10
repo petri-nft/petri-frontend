@@ -161,19 +161,6 @@ Currently using mock data for rapid prototyping. To test flows:
 
 ---
 
-## 🚧 Roadmap
-
-- [ ] Real-time NDVI integration with satellite APIs
-- [ ] Blockchain NFT minting (Polygon/Ethereum)
-- [ ] Push notifications for watering reminders
-- [ ] Social features (follow users, like trees)
-- [ ] PWA with offline support
-- [ ] Dark/Light forest themes
-- [ ] Multi-language support
-- [ ] Advanced marketplace filters
-
----
-
 
 ## 📄 License
 
