@@ -1,224 +1,214 @@
-# Petri Frontend
+# 🌳 Petri Frontend
 
-React platform for tree NFTs with AI chat, health tracking, and marketplace.
+> Your tree, your pet, your legacy—powered by real data.
 
-## Quick Start
+A gamified tree stewardship platform that transforms environmental action into an engaging experience. Plant real trees, mint dynamic NFTs, and nurture your TreeToken through AI-guided care powered by satellite data.
 
-```bash
-npm install
-npm run dev        # http://localhost:5173
-npm run build      # Production build
-```
-
-## Tech Stack
-
-- React 18 + TypeScript
-- Vite, Tailwind CSS
-- Zustand (state management)
-- React Router
-- shadcn/ui components
-
-## Features
-
-- User authentication with JWT
-- Plant and manage trees
-- AI chat with personality responses
-- Real-time health tracking
-- Tree marketplace
-- User profile and portfolio
-- Camera integration for tree photos
-
-## Project Structure
-
-```
-src/
-├── components/       # Reusable components
-│   ├── TreeChat.tsx
-│   ├── TreePersonalitySetup.tsx
-│   └── ui/          # shadcn/ui
-├── pages/           # Route pages
-│   ├── Landing.tsx
-│   ├── Login.tsx
-│   ├── PlantTree.tsx
-│   ├── Trees.tsx
-│   ├── TreeDetail.tsx
-│   └── Profile.tsx
-├── lib/
-│   ├── api.ts       # API client
-│   └── utils.ts
-├── store/           # Zustand state
-└── types/
-```
-
-## Environment
-
-```
-VITE_API_URL=http://localhost:8000/api
-```
-
-## API Endpoints
-
-- `/api/auth/*` - Authentication
-- `/api/trees/*` - Tree management
-- `/api/trees/{id}/chat` - AI chat
-- `/api/trees/{id}/personality` - Personality setup
-- `/api/trees/{id}/transcribe-voice` - Voice transcription
-
-## Routes
-
-- `/` - Home
-- `/login` - Login
-- `/register` - Register
-- `/trees` - Tree list
-- `/trees/:id` - Tree detail
-- `/plant` - Plant tree
-- `/profile` - User profile
-- `/chat` - Chat interface
-
-## 📱 Pages & Routes
-
-### Public Routes
-- `/login` - Sign in page
-- `/register` - Create account
-
-### Protected Routes (require authentication)
-- `/` - Landing page with tree overview, stats, and quick actions
-- `/plant` - Plant a new tree with live camera capture
-- `/trees` - Grid view of all your trees with filters/sorting
-- `/trees/:id` - Detailed tree view with health metrics, care log, and lessons
-- `/submit` - Submit weekly progress photos with notes
-- `/chat` - Chat with Sage AI companion, trigger education mode
-- `/trade` - Marketplace to browse and trade TreeTokens
-- `/profile` - User profile with tree gallery (owned/listed)
-
-## 🎨 Design System
-
-### Color Palette
-- **Primary**: `#2E7D32` (Forest Green) - main brand color
-- **Accent**: `#A5D6A7` (Mint) - secondary highlights
-- **Background**: `#F7FBF7` (Off-white) - soft base
-- **Earth**: `#6D4C41` (Brown) - badges/chips
-- **Health Gradients**: Red → Yellow → Green (0-100% health)
-
-### Visual Style
-- Rounded corners (`rounded-2xl`)
-- Soft shadows with green tint
-- Airy spacing and nature-first aesthetic
-- Smooth transitions and hover effects
-- WCAG AA compliant contrast ratios
-
-## 🗂️ Project Structure
-
-```
-src/
-├── components/        # Reusable UI components
-│   ├── ui/           # shadcn/ui components
-│   ├── CameraCapture.tsx
-│   ├── HealthBadge.tsx
-│   ├── LessonCard.tsx
-│   ├── TreeCard.tsx
-│   └── ProtectedRoute.tsx
-├── pages/            # Route pages
-│   ├── Landing.tsx
-│   ├── Login.tsx
-│   ├── Register.tsx
-│   ├── PlantTree.tsx
-│   ├── Trees.tsx
-│   ├── TreeDetail.tsx
-│   ├── Submit.tsx
-│   ├── Chat.tsx
-│   ├── Trade.tsx
-│   └── Profile.tsx
-├── store/            # Zustand state management
-│   └── useStore.ts
-├── types/            # TypeScript interfaces
-│   └── index.ts
-├── lib/              # Utilities and mock data
-│   ├── mockData.ts
-│   └── utils/
-│       ├── camera.ts
-│       └── helpers.ts
-└── App.tsx           # Main app with routing
-```
-
-## 🔧 Key Components
-
-### TreeCard
-Displays tree overview with photo, health badge, stats, and action buttons (water, chat, trade).
-
-### HealthBadge
-Color-coded health indicator (0-100%) with labels: Critical, Needs Care, Fair, Good, Excellent.
-
-### LessonCard
-Education module from Sage with steps, quiz, and completion rewards (+5 Stewardship Score).
-
-### CameraCapture
-Full-screen camera interface with capture/retake/confirm flow, includes client-side image compression.
-
-## 📊 Data Models
-
-### Tree
-```typescript
-{
-  id: string;
-  ownerId: string;
-  species: string;
-  nickname?: string;
-  location?: { lat, lng, label };
-  plantedAt: string; // ISO
-  lastWateredAt?: string;
-  healthIndex: number; // 0-100
-  photos: TreePhoto[];
-  careIndex: number;
-  stewardshipScore: number;
-  tokenId?: string;
-  listed?: boolean;
-  price?: number;
-}
-```
-
-### Lesson
-```typescript
-{
-  id: string;
-  title: string;
-  speciesTag?: string;
-  summary: string;
-  steps: string[];
-  quiz?: { question, options, correctIndex };
-}
-```
-
-## 🧪 Testing
-
-Currently includes mock data and in-memory state. To test flows:
-
-1. **Authentication**: Use demo account or create new user
-2. **Plant Flow**: Use real device camera or upload image
-3. **Care Actions**: Water trees, submit photos, complete lessons
-4. **Trade**: List trees, browse marketplace, simulate purchases
-5. **Profile**: View stats and tree galleries
-
-## 🚧 Future Enhancements
-
-- [ ] Backend integration (API routes with database)
-- [ ] Real NDVI calculation from satellite data
-- [ ] Blockchain integration for true NFT minting
-- [ ] PWA with offline support
-- [ ] Push notifications for watering reminders
-- [ ] Social features (follow users, like trees)
-- [ ] Advanced marketplace filters
-- [ ] Dark/light forest themes
-- [ ] Multi-language support
-
-## 📄 License
-
-This is a demo project. For production use, implement proper backend, authentication, and data persistence.
-
-## 🌟 Demo Screenshots
-
-*Core flows are fully functional with seeded demo data*
+![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?logo=typescript)
+![Vite](https://img.shields.io/badge/Vite-5.0-646CFF?logo=vite)
+![TailwindCSS](https://img.shields.io/badge/Tailwind-3.0-38B2AC?logo=tailwind-css)
 
 ---
 
-Built with 💚 for a greener future
+## ✨ Features
+
+- 🌱 **Plant & Track Trees** - Capture GPS coordinates and monitor tree health in real-time
+- 🤖 **AI Companion (Groot)** - Chat with your tree's personality-driven AI mentor
+- 📸 **Photo Submissions** - Document growth with weekly progress photos
+- 📊 **Health Dashboard** - Track NDVI scores, care index, and stewardship metrics
+- 🎓 **Education Mode** - Complete micro-lessons tailored to your tree species
+- 🛒 **Marketplace** - Trade TreeTokens with other users
+- 🏆 **Gamification** - Earn badges, unlock rarities, climb leaderboards
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js 16+ and npm
+- Backend API running (see [backend repo](https://github.com/petri-nft/petri-backend))
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/Xeeshan85/petri-frontend.git
+cd petri-frontend
+
+# Install dependencies
+npm install
+
+# Configure environment
+cp .env.example .env
+# Edit .env with your API URL
+
+# Start development server
+npm run dev
+```
+
+Visit `http://localhost:5173` or `8080` to see the app running! 🎉
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology | Purpose |
+|------------|---------|
+| **React 18** | UI framework with hooks |
+| **TypeScript** | Type-safe development |
+| **Vite** | Lightning-fast build tool |
+| **Tailwind CSS** | Utility-first styling |
+| **Zustand** | Lightweight state management |
+| **React Router** | Client-side routing |
+| **shadcn/ui** | Beautiful component library |
+
+---
+
+## 📁 Project Structure
+
+```
+src/
+├── components/          # Reusable UI components
+│   ├── ui/             # shadcn/ui components
+│   ├── TreeCard.tsx    # Tree display card
+│   ├── HealthBadge.tsx # Health indicator
+│   ├── LessonCard.tsx  # Education modules
+│   └── CameraCapture.tsx
+├── pages/              # Route pages
+│   ├── Landing.tsx     # Home dashboard
+│   ├── PlantTree.tsx   # Tree planting flow
+│   ├── TreeDetail.tsx  # Individual tree view
+│   ├── Chat.tsx        # AI chat interface
+│   ├── Trade.tsx       # Marketplace
+│   └── Profile.tsx     # User portfolio
+├── store/              # Zustand state
+│   └── useStore.ts     # Global state management
+├── lib/
+│   ├── api.ts          # API client
+│   └── utils.ts        # Helper functions
+└── types/              # TypeScript definitions
+```
+
+---
+
+## 🗺️ Routes
+
+### Public Routes
+- `/login` - Sign in
+- `/register` - Create account
+
+### Protected Routes (Require Authentication)
+- `/` - Landing dashboard with stats & quick actions
+- `/plant` - Plant new tree with live camera
+- `/trees` - Grid view of all your trees
+- `/trees/:id` - Detailed tree view with metrics
+- `/submit` - Submit weekly progress photos
+- `/chat` - Chat with Groot AI
+- `/trade` - Browse and trade TreeTokens
+- `/profile` - User portfolio & gallery
+
+---
+
+## 🔧 Available Scripts
+
+```bash
+npm run preview          # Preview production build
+
+# Code Quality
+npm run lint             # Run ESLint
+npm run type-check       # TypeScript validation
+```
+
+---
+
+
+
+## 🎯 Key Features Explained
+
+### TreeToken NFTs
+Each tree is a unique, living NFT whose rarity evolves based on:
+- **Health Index** (0-100%): Real-time NDVI from satellite data
+- **Care Index**: Your engagement level
+- **Stewardship Score**: Education completion + verified actions
+
+### Groot AI Companion
+Groot analyzes your tree's data and delivers:
+- Personalized care instructions
+- Humorous health updates via voice
+- Context-aware education modules
+- Weather-based action recommendations
+
+### Health Scoring
+Trees earn badges as they improve:
+- 🔴 **Critical** (0-20%): Immediate care needed
+- 🟠 **Needs Care** (21-40%): Attention required
+- 🟡 **Fair** (41-60%): Stable condition
+- 🟢 **Good** (61-80%): Thriving well
+- 💚 **Excellent** (81-100%): Peak health
+
+---
+
+## 📱 Mobile Optimization
+
+- Camera integration for native tree photos
+- Touch-optimized gestures
+- Responsive design (mobile-first)
+- PWA-ready architecture (coming soon)
+
+---
+
+## 🧪 Testing
+
+Currently using mock data for rapid prototyping. To test flows:
+
+1. **Sign Up/Login** - Use demo account or create new user
+2. **Plant Tree** - Use device camera or upload photo
+3. **Daily Care** - Water trees, complete lessons
+4. **Marketplace** - List trees, simulate purchases
+5. **Profile** - View stats and achievements
+
+---
+
+## 🚧 Roadmap
+
+- [ ] Real-time NDVI integration with satellite APIs
+- [ ] Blockchain NFT minting (Polygon/Ethereum)
+- [ ] Push notifications for watering reminders
+- [ ] Social features (follow users, like trees)
+- [ ] PWA with offline support
+- [ ] Dark/Light forest themes
+- [ ] Multi-language support
+- [ ] Advanced marketplace filters
+
+---
+
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🌟 Team ISTARI
+
+**Built with 💚 by:**
+- Muhammad Masab Hammad
+- Asim Iqbal
+- Muhammad Zeeshan Naveed
+- Mahad Rehman Durrani
+
+---
+
+## 📞 Support
+
+- **Documentation**: [Link to Wiki]
+- **Issues**: [GitHub Issues](https://github.com/Xeeshan85/petri-frontend/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/Xeeshan85/petri-frontend/discussions)
+
+---
+
+<p align="center">
+  <strong>🌳 Plant a tree. Mint an NFT. Change the world. 🌍</strong>
+</p>
